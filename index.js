@@ -10,7 +10,7 @@ module.exports = (input, opts) => {
 	return Promise.all(arrify(input).map(x => {
 		return pify(fs.stat)(x[0] === '!' ? x.substring(1) : x).then(stats => {
 			if (stats.isDirectory()) {
-				return path.join(x, '**', opts.ext || '');
+				return path.join(x, opts.prefix + '**', opts.ext ? (opts.prefix + opts.ext) : '');
 			}
 
 			return x;
@@ -32,7 +32,7 @@ module.exports.sync = function (input, opts) {
 			const stats = fs.statSync(x[0] === '!' ? x.substring(1) : x);
 
 			if (stats.isDirectory()) {
-				return path.join(x, '**', opts.ext || '');
+				return path.join(x, opts.prefix + '**', opts.ext ? (opts.prefix + opts.ext) : '');
 			}
 
 			return x;
@@ -54,6 +54,8 @@ module.exports.parseOpts = function (opts) {
 	} else if (opts.ext) {
 		opts.ext = `*.${opts.ext}`;
 	}
+
+	opts.prefix = opts.dot ? '{.,}' : '';
 
 	return opts;
 };

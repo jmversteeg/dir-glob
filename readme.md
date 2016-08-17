@@ -52,6 +52,13 @@ Type: `array` , `string`
 
 Append extension to the end of your glob.
 
+##### dot
+
+Type: `boolean`
+Default: `false`
+
+Explicitly match `.dot` files.
+
 ### dirGlob.sync(input, [options])
 
 Returns an array of glob strings.
@@ -69,6 +76,13 @@ A `string` or an `array` of paths.
 Type: `array`, `string`
 
 Append extension to the end of your glob.
+
+##### dot
+
+Type: `boolean`
+Default: `false`
+
+Explicitly match `.dot` files.
 
 
 ## License
