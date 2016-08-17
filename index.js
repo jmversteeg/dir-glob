@@ -5,13 +5,7 @@ const arrify = require('arrify');
 const pify = require('pify');
 
 module.exports = (input, opts) => {
-	opts = opts || {};
-
-	if (Array.isArray(opts.ext)) {
-		opts.ext = `*.{${opts.ext.join(',')}}`;
-	} else if (opts.ext) {
-		opts.ext = `*.${opts.ext}`;
-	}
+	opts = module.exports.parseOpts(opts);
 
 	return Promise.all(arrify(input).map(x => {
 		return pify(fs.stat)(x[0] === '!' ? x.substring(1) : x).then(stats => {
@@ -31,13 +25,7 @@ module.exports = (input, opts) => {
 };
 
 module.exports.sync = function (input, opts) {
-	opts = opts || {};
-
-	if (Array.isArray(opts.ext)) {
-		opts.ext = `*.{${opts.ext.join(',')}}`;
-	} else if (opts.ext) {
-		opts.ext = `*.${opts.ext}`;
-	}
+	opts = module.exports.parseOpts(opts);
 
 	return input.map(x => {
 		try {
@@ -56,4 +44,16 @@ module.exports.sync = function (input, opts) {
 			throw err;
 		}
 	});
+};
+
+module.exports.parseOpts = function (opts) {
+	opts = opts || {};
+
+	if (Array.isArray(opts.ext)) {
+		opts.ext = `*.{${opts.ext.join(',')}}`;
+	} else if (opts.ext) {
+		opts.ext = `*.${opts.ext}`;
+	}
+
+	return opts;
 };
